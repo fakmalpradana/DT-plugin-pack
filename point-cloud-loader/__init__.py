@@ -9,30 +9,11 @@ bl_info = {
 }
 
 import bpy
-import sys
-import subprocess
-import importlib
-
+import numpy as np
 import laspy
 import open3d as o3d
-import numpy as np
-
 from bpy.props import StringProperty
 from bpy_extras.io_utils import ImportHelper
-
-# # Function to install missing libraries
-# def install_and_import(module_name):
-#     try:
-#         importlib.import_module(module_name)
-#     except ModuleNotFoundError:
-#         subprocess.check_call([sys.executable, "-m", "pip", "install", module_name, "--target", "C:\\Program Files\\Blender Foundation\\Blender 4.2\\4.2\\python\\lib\\site-packages"])
-#     finally:
-#         globals()[module_name] = importlib.import_module(module_name)
-
-# # Install required libraries
-# install_and_import("laspy")
-# install_and_import("open3d")
-# install_and_import("numpy")
 
 # Function to convert LAS to PLY
 def las_to_ply(las_file, ply_file):
@@ -67,6 +48,12 @@ class LAS2PLY_OT_Converter(bpy.types.Operator, ImportHelper):
         
         # Import the PLY file into Blender's viewport
         bpy.ops.import_mesh.ply(filepath=ply_file)
+        
+        # Ensure the imported object is selected and visible
+        if bpy.context.selected_objects:
+            bpy.context.view_layer.objects.active = bpy.context.selected_objects[0]
+            bpy.ops.object.mode_set(mode='OBJECT')
+            bpy.ops.object.origin_set(type='ORIGIN_CENTER_OF_MASS', center='BOUNDS')
         
         self.report({'INFO'}, f"Successfully converted {las_file} to {ply_file} and imported into Blender")
         return {'FINISHED'}
