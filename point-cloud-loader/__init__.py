@@ -14,8 +14,8 @@ import subprocess
 import importlib
 
 import laspy
-import open3d
-import numpy
+import open3d as o3d
+import numpy as np
 
 from bpy.props import StringProperty
 from bpy_extras.io_utils import ImportHelper
