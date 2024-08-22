@@ -18,8 +18,8 @@ from mathutils import Vector
 
 try:
     import laspy
-except ImportError:
-    pip.main('install', 'laspy')
+except ModuleNotFoundError:
+    pip.main(['install', 'laspy'])
     import laspy
 
 
